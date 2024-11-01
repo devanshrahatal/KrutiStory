@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StoryWorld</title>
+    <style>
+        /* General styling */
+        body {
+            font-family: 'Comic Sans MS', sans-serif;
+            background-image: url('https://images.unsplash.com/photo-1528712306091-ed0763094c98');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            text-align: center;
+            color: #333;
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 50px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #4a90e2;
+            margin-top: 0;
+        }
+
+        p {
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        /* Genre button styling */
+        .genre-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        button {
+            background-color: #6bb8ed;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 1em;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #4a90e2;
+        }
+
+        /* Story container styling */
+        .story-container {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #storyOutput {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        /* Narrate and Download Buttons */
+        .action-buttons {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to StoryWorld</h1>
+        <p>Select a genre to generate a story!</p>
+        
+        <div class="genre-buttons">
+            <button onclick="generateStory('motivational')">Motivational</button>
+            <button onclick="generateStory('kids')">Kids</button>
+            <button onclick="generateStory('romantic')">Romantic</button>
+            <button onclick="generateStory('sad')">Sad</button>
+            <button onclick="generateStory('thrill')">Thrill</button>
+            <button onclick="generateStory('horror')">Horror</button>
+        </div>
+        
+        <div class="story-container">
+            <h2>Your Story:</h2>
+            <p id="storyOutput"></p>
+        </div>
+
+        <div class="action-buttons">
+            <button onclick="narrateStory()">Narrate Story</button>
+            <button onclick="downloadPDF()">Download as PDF</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script>
+        let storyText = "";  // Global variable to store the story text
+
+        function generateStory(genre) {
+            switch (genre) {
+                case 'motivational':
+                    storyText = "In a small village nestled between mountains, lived Arjun, a young man with dreams as big as the sky. Despite facing numerous setbacks, he trained every day at sunrise, determined to become a champion archer. After years of struggle, his hard work paid off when he won the national championship, becoming an inspiration for everyone who dared to dream big.";
+                    break;
+                case 'kids':
+                    storyText = "Once upon a time in a lush, green forest, there lived a curious squirrel named Chippy. One day, he found a sparkling pebble near a stream, which turned out to be a magic stone! Every wish he made came true, but Chippy quickly learned that true happiness came from playing with friends rather than magical wishes.";
+                    break;
+                case 'romantic':
+                    storyText = "Amid the blossoming cherry trees, Mia and Arjun met every spring. One year, Arjun left a small note hidden in a flower for Mia, asking her to meet him at the hilltop. She found it and hurried to the spot, where he was waiting with a promise ring. From that day, they became a couple cherished in the town's love legends.";
+                    break;
+                case 'sad':
+                    storyText = "Sitting by the ocean waves, Aarav thought of the days he spent with his best friend, who had moved away. The laughter, the shared secrets, and the long conversations under the stars now echoed only in his memory. With a heavy heart, he realized that sometimes, even the best of friends have to part ways.";
+                    break;
+                case 'thrill':
+                    storyText = "Raj was an investigator with a knack for solving complex mysteries. One night, he received an anonymous letter containing cryptic clues that led him through an abandoned library. At the stroke of midnight, he finally uncovered a hidden vault, revealing secrets of a long-lost treasure known to only a few in history.";
+                    break;
+                case 'horror':
+                    storyText = "It was midnight when Aisha decided to explore the mysterious mansion at the end of her street. As she stepped inside, doors creaked, shadows flickered, and cold air whispered through the hall. Suddenly, she felt a chilling hand on her shoulder. She spun around, but no one was there… or so she thought.";
+                    break;
+                default:
+                    storyText = "Please select a genre to generate a story.";
+            }
+            document.getElementById("storyOutput").innerText = storyText;
+        }
+
+        function narrateStory() {
+            const utterance = new SpeechSynthesisUtterance(storyText);
+            utterance.voice = speechSynthesis.getVoices().find(voice => voice.name.includes("Google UK English Female"));
+            utterance.rate = 1;  // Set narration speed
+            speechSynthesis.speak(utterance);
+        }
+
+        async function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text("StoryWorld - Your Story", 10, 10);
+            doc.text(storyText, 10, 20);
+            doc.save("StoryWorld_Story.pdf");
+        }
+    </script>
+</body>
+</html>
